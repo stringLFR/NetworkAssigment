@@ -21,8 +21,10 @@ public class PlayerActions : MonoBehaviour
         Move();
     }
 
-    public void Move() => _rb.AddForce(new Vector3(moveDir.x, 0f, 0f) * Time.deltaTime * _moveSpeedSideToSide + 
+    public void Move(){
+        _rb.AddForce(new Vector3(moveDir.x, 0f, 0f) * Time.deltaTime * _moveSpeedSideToSide +
         new Vector3(0f, moveDir.y, 0f) * Time.deltaTime * _moveSpeedUpAndDown, ForceMode.Impulse);
+    }
 
 
     // New Inputsystem value methods
