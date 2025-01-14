@@ -27,5 +27,7 @@ public class PlayerClient : MonoBehaviour
     {
         SyncManager.SyncBlackboardsPositionRpc(ClientId, Statboard.position.x, Statboard.position.y, Statboard.position.z);
         SyncManager.PositionSetRpc(ClientId);
+        SyncManager.SyncBlackboardsScaleRpc(ClientId, Statboard.scale.x, Statboard.scale.y, Statboard.scale.z);
+        SyncManager.ScaleSetRpc(ClientId);
     }
 }

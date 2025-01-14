@@ -42,10 +42,9 @@ public class PlayerSyncManager : NetworkBehaviour
         }
     }
     [Rpc(SendTo.Everyone)]
-    public void PositionSetRpc(ulong id){
+    public void ScaleSetRpc(ulong id){
         if (_localClient == _clients[id]) return;
-        _clients[id].transform.position = _clients[id].Statboard.position;
-        //_clients[id].transform.position = Vector3.Lerp(_clients[id].transform.position, _clients[id].Statboard.position, 0.5f);
+        _clients[id].transform.localScale = _clients[id].Statboard.scale;
     }
 
     [Rpc(SendTo.Everyone)]
@@ -54,6 +53,12 @@ public class PlayerSyncManager : NetworkBehaviour
         _clients[id].Statboard.scale.x = x;
         _clients[id].Statboard.scale.y = y;
         _clients[id].Statboard.scale.z = z;
+    }
+
+    [Rpc(SendTo.Everyone)]
+    public void PositionSetRpc(ulong id){
+        if (_localClient == _clients[id]) return;
+        _clients[id].transform.position = _clients[id].Statboard.position;
     }
 
     [Rpc(SendTo.Everyone)]

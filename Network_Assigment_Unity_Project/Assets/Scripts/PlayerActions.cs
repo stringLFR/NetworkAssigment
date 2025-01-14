@@ -9,16 +9,21 @@ public class PlayerActions : MonoBehaviour
     [SerializeField] float _moveSpeedUpAndDown = 1f;
     public PlayerClient PlayerClient;
     Vector2 moveDir, stretchDir;
+    Vector3 baseScale;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
-        
+        baseScale = transform.localScale;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
         Move();
+        float xScale = baseScale.x + Mathf.Abs(moveDir.x) - Mathf.Abs(moveDir.y)/2;
+        float yScale = baseScale.y + Mathf.Abs(moveDir.y) - Mathf.Abs(moveDir.x)/2;
+        transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(xScale, yScale, baseScale.z), 0.5f);
+        PlayerClient.Statboard.scale = transform.localScale;
     }
 
     public void Move(){
