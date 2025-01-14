@@ -119,6 +119,17 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &372663087 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8335674125407511511, guid: 9cc4d97365df1e8459d45aad622cb5bb, type: 3}
+  m_PrefabInstance: {fileID: 8775146563244236544}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 593a2fe42fa9d37498c96f9a383b6521, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7282808990465231432
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -175,6 +186,18 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 2015631382
       objectReference: {fileID: 0}
+    - target: {fileID: 7004349563474440835, guid: d46a47845e16e3e4bb95bd69e320837a, type: 3}
+      propertyPath: _playerPrefab
+      value: 
+      objectReference: {fileID: 7819363743523525444, guid: b3427004608cee34eaa029e934fb4d99, type: 3}
+    - target: {fileID: 7004349563474440835, guid: d46a47845e16e3e4bb95bd69e320837a, type: 3}
+      propertyPath: networkManager
+      value: 
+      objectReference: {fileID: 372663087}
+    - target: {fileID: 7004349563474440835, guid: d46a47845e16e3e4bb95bd69e320837a, type: 3}
+      propertyPath: _networkManager
+      value: 
+      objectReference: {fileID: 372663087}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

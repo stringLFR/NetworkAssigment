@@ -5,36 +5,45 @@ using UnityEngine;
 
 public class PlayerSyncManager : NetworkBehaviour
 {
-    [SerializeField] GameObject playerPrefab;
-    [SerializeField] NetworkManager networkManager;
-    List<PlayerClient> clients;
+    [SerializeField] GameObject _playerPrefab;
+    [SerializeField] NetworkManager _networkManager;
+    Dictionary<ulong, PlayerClient> _clients;
+    PlayerClient _localClient = null;
+    ulong _currentClientsAmount = 0;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
         DontDestroyOnLoad(gameObject);
-
-        networkManager.OnClientConnectedCallback += NewClientJoined;
+        _clients = new Dictionary<ulong, PlayerClient>();
+        _networkManager.OnClientConnectedCallback += NewClientJoined;
     }
 
     void NewClientJoined(ulong id){
         if (IsHost == false) return;
-        if (clients == null){
-            clients = new List<PlayerClient>();
-            AddClientsRpc(id);
+        AddClientsRpc(id);
+        _currentClientsAmount++;
+        for(ulong i = 0; i < _currentClientsAmount; i++)
+        {
+            AddClientsRpc(i);
         }
     }
+
     [Rpc(SendTo.Everyone)]
     public void AddClientsRpc(ulong id){
-        GameObject client = Instantiate(playerPrefab);
-        PlayerClient ClientId = client.GetComponent<PlayerClient>();
-        ClientId.ClientID = id;
-        clients.Add(ClientId);
+        if (_clients.ContainsKey(id)) return;
+        GameObject clientOb = Instantiate(_playerPrefab);
+        PlayerClient Client = clientOb.GetComponent<PlayerClient>();
+        Client.clientId = id;
+        _clients.Add(Client.clientId, Client);
+        if (_localClient == null) _localClient = Client;
+        if (Client.clientId != _localClient.clientId)
+        {
+            PlayerActions actions = clientOb.GetComponent<PlayerActions>();
+            actions.enabled = false;
+        }
     }
 
-    private void OnDisable()
-    {
-        NetworkManager.OnClientConnectedCallback -= NewClientJoined;
-    }
+    public override void OnDestroy() => _networkManager.OnClientConnectedCallback -= NewClientJoined;
 
 
 
