@@ -7,8 +7,8 @@ public class PlayerActions : MonoBehaviour
     [SerializeField] Rigidbody _rb;
     [SerializeField] float _moveSpeedSideToSide = 1f;
     [SerializeField] float _moveSpeedUpAndDown = 1f;
-
-    Vector2 moveDir, stretchDir = Vector2.zero;
+    public PlayerClient PlayerClient;
+    Vector2 moveDir, stretchDir;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -16,18 +16,19 @@ public class PlayerActions : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         Move();
     }
 
     public void Move(){
-        _rb.AddForce(new Vector3(moveDir.x, 0f, 0f) * Time.deltaTime * _moveSpeedSideToSide +
-        new Vector3(0f, moveDir.y, 0f) * Time.deltaTime * _moveSpeedUpAndDown, ForceMode.Impulse);
+        _rb.AddForce(new Vector3(moveDir.x, 0f, 0f) * Time.fixedDeltaTime * _moveSpeedSideToSide +
+        new Vector3(0f, moveDir.y, 0f) * Time.fixedDeltaTime * _moveSpeedUpAndDown, ForceMode.Impulse);
+        PlayerClient.Statboard.position = transform.position;
     }
 
 
     // New Inputsystem value methods
     private void OnMove(InputValue value) => moveDir = value.Get<Vector2>();
-    private void OnStretch(InputValue value) => stretchDir = value.Get<Vector2>();
+    private void OnStretch(InputValue value) => moveDir = value.Get<Vector2>();
 }

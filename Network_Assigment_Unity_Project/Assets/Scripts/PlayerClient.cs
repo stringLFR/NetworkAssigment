@@ -1,9 +1,21 @@
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerClient : MonoBehaviour
 {
-    public ulong clientId;
-    //public ulong ClientID { get { return clientId; } set { clientId = value; } }
+    public ulong ClientId;
+    public PlayerActions Actions;
+    public PlayerInput Input;
+    public PlayerSyncManager SyncManager;
+    public clientBlackboard Statboard;
+    [Serializable]
+    public struct clientBlackboard{
+        public Vector3 position, scale;
+        public Quaternion rotation;
+    }
+
+    private void Awake() => Actions.PlayerClient = this;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -11,8 +23,9 @@ public class PlayerClient : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        
+        SyncManager.SyncBlackboardsPositionRpc(ClientId, Statboard.position.x, Statboard.position.y, Statboard.position.z);
+        SyncManager.PositionSetRpc(ClientId);
     }
 }
