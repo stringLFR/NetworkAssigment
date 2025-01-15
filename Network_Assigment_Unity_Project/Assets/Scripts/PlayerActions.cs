@@ -5,6 +5,7 @@ public class PlayerActions : MonoBehaviour
 {
     [SerializeField] PlayerDamageDealer _damageDealer;
     [SerializeField] Rigidbody _rb;
+    public Rigidbody rb => _rb;
     [SerializeField] float _moveSpeedSideToSide = 1f;
     [SerializeField] float _moveSpeedUpAndDown = 1f;
     public PlayerClient PlayerClient;
@@ -30,6 +31,7 @@ public class PlayerActions : MonoBehaviour
         _rb.AddForce(new Vector3(moveDir.x, 0f, 0f) * Time.fixedDeltaTime * _moveSpeedSideToSide +
         new Vector3(0f, moveDir.y, 0f) * Time.fixedDeltaTime * _moveSpeedUpAndDown, ForceMode.Impulse);
         PlayerClient.Statboard.position = transform.position;
+        PlayerClient.Statboard.velocity = _rb.linearVelocity;
     }
 
 

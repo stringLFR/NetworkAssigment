@@ -140,7 +140,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1316790859014398099, guid: d46a47845e16e3e4bb95bd69e320837a, type: 3}
       propertyPath: m_Name
-      value: PlayerSyncManager
+      value: Server
       objectReference: {fileID: 0}
     - target: {fileID: 3139049615433009678, guid: d46a47845e16e3e4bb95bd69e320837a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -186,14 +186,6 @@ PrefabInstance:
       propertyPath: GlobalObjectIdHash
       value: 2015631382
       objectReference: {fileID: 0}
-    - target: {fileID: 7004349563474440835, guid: d46a47845e16e3e4bb95bd69e320837a, type: 3}
-      propertyPath: _playerPrefab
-      value: 
-      objectReference: {fileID: 7819363743523525444, guid: b3427004608cee34eaa029e934fb4d99, type: 3}
-    - target: {fileID: 7004349563474440835, guid: d46a47845e16e3e4bb95bd69e320837a, type: 3}
-      propertyPath: networkManager
-      value: 
-      objectReference: {fileID: 372663087}
     - target: {fileID: 7004349563474440835, guid: d46a47845e16e3e4bb95bd69e320837a, type: 3}
       propertyPath: _networkManager
       value: 
@@ -312,7 +304,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: NetworkManager
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3660497704785795733, guid: 9cc4d97365df1e8459d45aad622cb5bb, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

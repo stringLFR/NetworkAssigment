@@ -160,10 +160,6 @@ MonoBehaviour:
   Actions: {fileID: 715096344358184893}
   Input: {fileID: 8781104526670594522}
   SyncManager: {fileID: 0}
-  Statboard:
-    position: {x: 0, y: 0, z: 0}
-    scale: {x: 0, y: 0, z: 0}
-    rotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &715096344358184893
 MonoBehaviour:
   m_ObjectHideFlags: 0
