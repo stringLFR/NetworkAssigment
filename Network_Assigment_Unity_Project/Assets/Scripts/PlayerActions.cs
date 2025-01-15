@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 public class PlayerActions : MonoBehaviour
 {
     [SerializeField] PlayerDamageDealer _damageDealer;
+    public PlayerDamageDealer DamageDealer => _damageDealer;
     [SerializeField] Rigidbody _rb;
     public Rigidbody rb => _rb;
     [SerializeField] float _moveSpeedSideToSide = 1f;
@@ -21,8 +22,9 @@ public class PlayerActions : MonoBehaviour
     void FixedUpdate()
     {
         Move();
-        float xScale = baseScale.x + Mathf.Abs(moveDir.x) - Mathf.Abs(moveDir.y)/2;
-        float yScale = baseScale.y + Mathf.Abs(moveDir.y) - Mathf.Abs(moveDir.x)/2;
+        _damageDealer.StretchTowardsDir(stretchDir, PlayerClient);
+        float xScale = baseScale.x + Mathf.Abs(moveDir.x) - Mathf.Abs(moveDir.y) * 0.1f;
+        float yScale = baseScale.y + Mathf.Abs(moveDir.y) - Mathf.Abs(moveDir.x) * 0.1f;
         transform.localScale = Vector3.Lerp(transform.localScale, new Vector3(xScale, yScale, baseScale.z), 0.5f);
         PlayerClient.Statboard.scale = transform.localScale;
     }
@@ -37,5 +39,5 @@ public class PlayerActions : MonoBehaviour
 
     // New Inputsystem value methods
     private void OnMove(InputValue value) => moveDir = value.Get<Vector2>();
-    private void OnStretch(InputValue value) => moveDir = value.Get<Vector2>();
+    private void OnStretch(InputValue value) => stretchDir = value.Get<Vector2>();
 }

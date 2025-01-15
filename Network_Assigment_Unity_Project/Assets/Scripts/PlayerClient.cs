@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerClient : MonoBehaviour
+public class PlayerClient : MonoBehaviour 
 {
     public ulong ClientId;
     public PlayerActions Actions;
@@ -29,5 +29,11 @@ public class PlayerClient : MonoBehaviour
         SyncManager.VelocitySetRpc(ClientId);
         SyncManager.SyncBlackboardsScaleRpc(ClientId, Statboard.scale.x, Statboard.scale.y, Statboard.scale.z);
         SyncManager.ScaleSetRpc(ClientId);
+        SyncManager.SyncBlackboardsSlimeAppendageScaleRpc(ClientId, Statboard.damageScale.x, Statboard.damageScale.y,Statboard.damageScale.x);
+        SyncManager.SlimeAppendageScaleSetRpc(ClientId);
+        SyncManager.SyncBlackboardsSlimeAppendageRotationRpc(ClientId, Statboard.damageRotation.z);
+        SyncManager.SlimeAppendageScaleSetRpc(ClientId);
+        SyncManager.SyncBlackboardsSlimeAppendagePositionRpc(ClientId, Statboard.damagePos.x, Statboard.damagePos.y, Statboard.damagePos.x);
+        SyncManager.SlimeAppendageScaleSetRpc(ClientId);
     }
 }

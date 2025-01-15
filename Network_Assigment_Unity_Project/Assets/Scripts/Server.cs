@@ -8,8 +8,8 @@ public enum ClientCheckUp
     POSITION, SCALE, DAMAGE,VELOCITY,
 }
 public struct clientBlackboard{
-    public Vector3 position, scale, velocity;
-    public Quaternion rotation;
+    public Vector3 position, scale, velocity, damagePos,damageScale;
+    public Quaternion damageRotation;
     public int health;
 }
 public class Server : NetworkBehaviour
