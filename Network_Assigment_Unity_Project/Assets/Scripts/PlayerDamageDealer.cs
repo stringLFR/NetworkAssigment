@@ -21,14 +21,16 @@ public class PlayerDamageDealer : MonoBehaviour
         }
         client.Statboard.damagePos = transform.localPosition; 
         client.Statboard.damageScale = bodyCenter.transform.localScale;
-        client.Statboard.damageRotation = bodyCenter.transform.localRotation;
+        client.Statboard.damageRotation = bodyCenter.transform.localRotation.eulerAngles;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.collider == myPlayer) return;
-        if (collision.gameObject.CompareTag("Player") == false) return;
-        collision.gameObject.TryGetComponent(out PlayerHealth health);
-        health.TakeDamage(1);
+        if (collision.gameObject.CompareTag("Ball") == false) return;
+        collision.gameObject.TryGetComponent(out Ball ball);
+        ContactPoint contactPoint = collision.GetContact(0);
+        int distanceFromCenter = (int)Vector2.Distance(bodyCenter.transform.position, contactPoint.normal);
+        ball.BallHit(distanceFromCenter, contactPoint);
     }
 }

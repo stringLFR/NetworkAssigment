@@ -89,3 +89,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowTopMostFoldoutHeaderGroup: 1
   _playerManager: {fileID: 7004349563474440835}
+  _hostMat: {fileID: 2100000, guid: ac0b0f7982cc5ce4b8d9f60d37677218, type: 2}
+  _ballDamageable: {fileID: 2100000, guid: 639d616f54de4d14c9a5a40ae1b5d713, type: 2}
+  BattleManager: {fileID: 0}

@@ -26,6 +26,7 @@ public class PlayerSyncManager : NetworkBehaviour
 
     void NewClientJoined(ulong id){
         if (IsHost == false) return;
+        _server.HostJoined();
         AddClientsRpc(id);
         AddToServerDictionaryRpc(id);
         _currentClientsAmount++;
@@ -57,12 +58,8 @@ public class PlayerSyncManager : NetworkBehaviour
             Client.Input.enabled = false;
             Client.Actions.enabled = false;
         }
-    }
-    [Rpc(SendTo.Everyone)]
-    public void ScaleSetRpc(ulong id){
-        if (!_clients.ContainsKey(id)) return;
-        if (_localClient == _clients[id]) return;
-        _clients[id].transform.localScale = _clients[id].Statboard.scale;
+        if (!_clients.ContainsKey(0)) return;
+        if (_clients[id] == _clients[0]) _server.SetHostColor(_clients[id]);
     }
     [Rpc(SendTo.Everyone)]
     public void SyncBlackboardsScaleRpc(ulong id, float x, float y, float z){
@@ -74,12 +71,7 @@ public class PlayerSyncManager : NetworkBehaviour
         _clients[id].Statboard.scale.x = x;
         _clients[id].Statboard.scale.y = y;
         _clients[id].Statboard.scale.z = z;
-    }
-    [Rpc(SendTo.Everyone)]
-    public void PositionSetRpc(ulong id){
-        if (!_clients.ContainsKey(id)) return;
-        if (_localClient == _clients[id]) return;
-        _clients[id].transform.position = _clients[id].Statboard.position;
+        _clients[id].transform.localScale = _clients[id].Statboard.scale;
     }
     [Rpc(SendTo.Everyone)]
     public void SyncBlackboardsPositionRpc(ulong id, float x, float y, float z){
@@ -91,12 +83,7 @@ public class PlayerSyncManager : NetworkBehaviour
         _clients[id].Statboard.position.x = x;
         _clients[id].Statboard.position.y = y;
         _clients[id].Statboard.position.z = z;
-    }
-    [Rpc(SendTo.Everyone)]
-    public void VelocitySetRpc(ulong id){
-        if (!_clients.ContainsKey(id)) return;
-        if (_localClient == _clients[id]) return;
-        _clients[id].Actions.rb.linearVelocity = _clients[id].Statboard.velocity;
+        _clients[id].transform.position = _clients[id].Statboard.position;
     }
     [Rpc(SendTo.Everyone)]
     public void SyncBlackboardsVelocityRpc(ulong id, float x, float y, float z){
@@ -108,26 +95,9 @@ public class PlayerSyncManager : NetworkBehaviour
         _clients[id].Statboard.velocity.x = x;
         _clients[id].Statboard.velocity.y = y;
         _clients[id].Statboard.velocity.z = z;
+        _clients[id].Actions.rb.linearVelocity = _clients[id].Statboard.velocity;
     }
     #endregion
-    [Rpc(SendTo.Everyone)]
-    public void SlimeAppendageScaleSetRpc(ulong id){
-        if (!_clients.ContainsKey(id)) return;
-        if (_localClient == _clients[id]) return;
-        _clients[id].Actions.DamageDealer.BodyCenter.transform.localScale = _clients[id].Statboard.damageScale;
-    }
-    [Rpc(SendTo.Everyone)]
-    public void SlimeAppendageRotationSetRpc(ulong id){
-        if (!_clients.ContainsKey(id)) return;
-        if (_localClient == _clients[id]) return;
-        _clients[id].Actions.DamageDealer.BodyCenter.transform.localRotation = _clients[id].Statboard.damageRotation;
-    }
-    [Rpc(SendTo.Everyone)]
-    public void SlimeAppendagePositionSetRpc(ulong id){
-        if (!_clients.ContainsKey(id)) return;
-        if (_localClient == _clients[id]) return;
-        _clients[id].Actions.DamageDealer.transform.localPosition = _clients[id].Statboard.damagePos;
-    }
     [Rpc(SendTo.Everyone)]
     public void SyncBlackboardsSlimeAppendageScaleRpc(ulong id, float sx, float sy, float sz){
         if (!_clients.ContainsKey(id)) return;
@@ -135,7 +105,8 @@ public class PlayerSyncManager : NetworkBehaviour
             ServerLookUpClientRpc(id, ClientCheckUp.VELOCITY);
             return;
         }
-        _clients[id].Actions.DamageDealer.BodyCenter.transform.localScale = new Vector3(sx, sy, sz);
+        _clients[id].Statboard.damageScale = new Vector3(sx, sy, sz);
+        _clients[id].Actions.DamageDealer.BodyCenter.transform.localScale = _clients[id].Statboard.damageScale;
     }
     [Rpc(SendTo.Everyone)]
     public void SyncBlackboardsSlimeAppendageRotationRpc(ulong id, float rot){
@@ -144,7 +115,8 @@ public class PlayerSyncManager : NetworkBehaviour
             ServerLookUpClientRpc(id, ClientCheckUp.VELOCITY);
             return;
         }
-        _clients[id].Actions.DamageDealer.BodyCenter.transform.localRotation = Quaternion.Euler(0, 0, rot);
+        _clients[id].Statboard.damageRotation = new Vector3(0, 0, rot);
+        _clients[id].Actions.DamageDealer.BodyCenter.transform.localRotation = Quaternion.Euler(_clients[id].Statboard.damageRotation);
     }
     [Rpc(SendTo.Everyone)]
     public void SyncBlackboardsSlimeAppendagePositionRpc(ulong id, float px, float py, float pz){
@@ -153,7 +125,8 @@ public class PlayerSyncManager : NetworkBehaviour
             ServerLookUpClientRpc(id, ClientCheckUp.VELOCITY);
             return;
         }
-        _clients[id].Actions.DamageDealer.transform.localPosition = new Vector3(px, py, pz);
+        _clients[id].Statboard.damagePos = new Vector3(px, py, pz);
+        _clients[id].Actions.DamageDealer.transform.localPosition = _clients[id].Statboard.damagePos;
     }
     #endregion
     public override void OnDestroy() => _networkManager.OnClientConnectedCallback -= NewClientJoined;
