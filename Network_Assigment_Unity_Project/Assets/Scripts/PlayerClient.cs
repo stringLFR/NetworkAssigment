@@ -5,9 +5,11 @@ using UnityEngine.InputSystem;
 public class PlayerClient : MonoBehaviour 
 {
     public ulong ClientId;
-    public GameObject Emote;
+    public GameObject Emote_Wow;
+    public GameObject Emote_Happy;
+    public GameObject Emote_Angry;
     public PlayerActions Actions;
-    public PlayerInput Input;
+    public PlayerInput PInput;
     public PlayerSyncManager SyncManager;
     public clientBlackboard Statboard;
     public Vector2 moveDir, stretchDir;
@@ -18,7 +20,7 @@ public class PlayerClient : MonoBehaviour
     private void Awake()
     {
         Actions.PlayerClient = this;
-        Emote.SetActive(false);
+        Emote_Wow.SetActive(true);
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -35,5 +37,18 @@ public class PlayerClient : MonoBehaviour
         SyncManager.SyncBlackboardsSlimeAppendagePositionRpc(ClientId, Statboard.damagePos.x, Statboard.damagePos.y, Statboard.damagePos.x);
         SyncManager.SyncBlackboardsSlimeAppendageScaleRpc(ClientId, Statboard.damageScale.x, Statboard.damageScale.y, Statboard.damageScale.x);
         SyncManager.SyncBlackboardsSlimeAppendageRotationRpc(ClientId, Statboard.damageRotation.z);
+
+        if (Input.GetKey(KeyCode.X))
+        {
+            SyncManager.NewPlayerFace(1, ClientId);
+        }
+        if (Input.GetKey(KeyCode.C))
+        {
+            SyncManager.NewPlayerFace(2, ClientId);
+        }
+        if (Input.GetKey(KeyCode.V))
+        {
+            SyncManager.NewPlayerFace(3, ClientId);
+        }
     }
 }

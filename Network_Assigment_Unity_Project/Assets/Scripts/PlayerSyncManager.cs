@@ -11,6 +11,7 @@ public class PlayerSyncManager : NetworkBehaviour
     [SerializeField] Server _server;
     [SerializeField] GameObject _playerPrefab;
     [SerializeField] NetworkManager _networkManager;
+    public NetworkManager manager => _networkManager;
     Dictionary<ulong, PlayerClient> _clients;
     public Dictionary<ulong, PlayerClient> Clients => _clients;
     PlayerClient _localClient = null;
@@ -31,6 +32,22 @@ public class PlayerSyncManager : NetworkBehaviour
         AddToServerDictionaryRpc(id);
         _currentClientsAmount++;
         for(ulong i = 0; i < _currentClientsAmount; i++) AddClientsRpc(i);
+    }
+    public void SetPlayerFace(int i, ulong id)
+    {
+        _clients[id].Emote_Wow.SetActive(false);
+        _clients[id].Emote_Happy.SetActive(false);
+        _clients[id].Emote_Angry.SetActive(false);
+        switch (i)
+        {
+            case 1: _clients[id].Emote_Wow.SetActive(true); break;
+            case 2: _clients[id].Emote_Happy.SetActive(true); break;
+            case 3: _clients[id].Emote_Angry.SetActive(true); break;
+        }
+    }
+    public void NewPlayerFace(int i, ulong id)
+    {
+        _server.NewPlayerFaceRpc(i, id);
     }
 
     #region Rpc server
@@ -55,7 +72,7 @@ public class PlayerSyncManager : NetworkBehaviour
             _localClient.IsLocalClient = true;
         }
         if (Client.ClientId != _localClient.ClientId){
-            Client.Input.enabled = false;
+            Client.PInput.enabled = false;
             Client.Actions.enabled = false;
         }
         if (!_clients.ContainsKey(0)) return;

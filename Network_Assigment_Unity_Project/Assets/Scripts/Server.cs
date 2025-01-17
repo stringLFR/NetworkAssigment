@@ -18,6 +18,7 @@ public struct ballBlackBoard
 }
 public class Server : NetworkBehaviour
 {
+    [SerializeField] Canvas canvas;
     [SerializeField] PlayerSyncManager _playerManager;
     [SerializeField] Material _hostMat;
     [SerializeField] Material _ballDamageable;
@@ -40,11 +41,32 @@ public class Server : NetworkBehaviour
         SyncBall();
     }
 
+    public void EnableBall()
+    {
+        if (IsClient == false) return;
+        ActivateBallRpc();
+
+    }
+
+    [Rpc(SendTo.Everyone)]
+    public void ActivateBallRpc()
+    {
+        BattleManager.BallShallBeEnabled();
+    }
+
     public void AddToServerDictionary(ulong id) {
         if (_lastSavedClients.ContainsKey(id)) return;
         _lastSavedClients.Add(_playerManager.Clients[id].ClientId, _playerManager.Clients[id]);
     }
 
+    public void AddHost(){
+        _playerManager.manager.StartHost();
+        canvas.enabled = false;
+    }
+    public void AddClient(){
+        _playerManager.manager.StartClient();
+        canvas.enabled = false;
+    }
 
     public void ServerLookUpClient(ulong id, ClientCheckUp checkUp)
     {
@@ -88,5 +110,19 @@ public class Server : NetworkBehaviour
         Vector3 dir = new Vector3(x, y, z);
         _serverBall.Renderer.material = _ballDamageable;
         _serverBall.KickBall(damage, dir);
+    }
+
+    
+
+    [Rpc(SendTo.Server)]
+    public void NewPlayerFaceRpc(int i, ulong id)
+    {
+        SetPlayerFaceRpc(i,id);
+    } 
+
+    [Rpc(SendTo.Everyone)]
+    public void SetPlayerFaceRpc(int i, ulong id)
+    {
+        _playerManager.SetPlayerFace(i, id);
     }
 }
